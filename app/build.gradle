@@ -70,7 +70,8 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
-
+    implementation "androidx.compose.material:material:1.4.3"
+    
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
 
     // retrofit
@@ -106,4 +107,6 @@ dependencies {
 
 
     implementation "androidx.security:security-crypto:1.1.0-alpha06"
+
+
 }

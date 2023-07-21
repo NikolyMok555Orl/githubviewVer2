@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.example.appfreeapi.data.RepositoryRepo
 import com.example.appfreeapi.data.model.RepositoryModel
 import com.example.appfreeapi.login.LoginEffect
+import com.example.appfreeapi.user.UserAction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -63,6 +64,12 @@ class SearchRepoVM(private val repositoryRepo: RepositoryRepo = RepositoryRepo()
                     _state.emit(_state.value.copy(query = "", isNotLoading = true))
 
                 }
+
+                is SearchRepoEvent.OpenRepoWithGitHub -> {
+
+                    _sharedFlowEffect.emit(SearchRepoEffect.OpenBrowser(event.url))
+
+                }
             }
         }
     }
@@ -85,10 +92,13 @@ sealed class SearchRepoEvent() {
 
     data class ClickToCart(val repoModel: RepositoryModel) : SearchRepoEvent()
 
+    data class OpenRepoWithGitHub(val url: String) : SearchRepoEvent()
+
 }
 
 sealed class SearchRepoEffect() {
     data class NavToUser(val nameOwner: String) : SearchRepoEffect()
+    data class OpenBrowser(val url:String): SearchRepoEffect()
 
 }
 

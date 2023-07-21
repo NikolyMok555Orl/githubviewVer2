@@ -2,6 +2,7 @@ package com.example.appfreeapi.repositories
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -16,6 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
@@ -29,6 +32,7 @@ import com.example.appfreeapi.data.model.RepositoryModel
 import com.example.appfreeapi.ui.theme.component.ErrorScreenUI
 import com.example.appfreeapi.ui.theme.component.LoadingScreenUI
 import com.example.appfreeapi.ui.theme.component.SearchTextUI
+import com.example.appfreeapi.utils.openBrowser
 
 
 @Composable
@@ -36,8 +40,7 @@ fun SearchRepoScreenUI(
     navController: NavController, searchRepoVM: SearchRepoVM = viewModel(),
     modifier: Modifier = Modifier
 ) {
-
-    val lazyListState: LazyListState = rememberLazyListState()
+    val context = LocalContext.current
     val repoList = searchRepoVM.pagingDataFlow.collectAsLazyPagingItems()
     val stateUI = searchRepoVM.state.collectAsState()
     LaunchedEffect(key1 = true) {
@@ -45,6 +48,10 @@ fun SearchRepoScreenUI(
             when (effect) {
                 is SearchRepoEffect.NavToUser -> {
                     navController.navigate("${NavHost.USER}/${effect.nameOwner}")
+                }
+
+                is SearchRepoEffect.OpenBrowser -> {
+                    openBrowser(context, effect.url)
                 }
             }
         }
@@ -77,14 +84,18 @@ private fun SearchRepoScreenUI(
         if (repoList.loadState.refresh is LoadState.Loading && !stateUI.isNotLoading) {
             LoadingScreenUI()
         } else if (repoList.loadState.refresh is LoadState.Error) {
-            ErrorScreenUI("Ошибка при загрузки")
-        } else if(repoList.loadState.refresh !is LoadState.Loading) {
-            LazyColumn(modifier = Modifier.weight(1f)) {
+            ErrorScreenUI(
+                (repoList.loadState.refresh as LoadState.Error).error.message ?: "Произошла ошибка"
+            )
+        } else if (repoList.loadState.refresh !is LoadState.Loading) {
+            LazyColumn(contentPadding = PaddingValues(4.dp), modifier = Modifier.weight(1f)) {
                 items(repoList.itemCount) {
-                    repoList[it]?.let {
+                    repoList[it]?.let { repository ->
                         RepoItemUI(
-                            repository = it,
-                            onClick = { sendEvent(SearchRepoEvent.ClickToCart(it)) })
+                            repository = repository,
+                            onClick = { sendEvent(SearchRepoEvent.ClickToCart(repository)) },
+                            onOpenUrl = { sendEvent(SearchRepoEvent.OpenRepoWithGitHub(repository.htmlUrl)) }
+                        )
                     }
 
                 }
@@ -92,21 +103,3 @@ private fun SearchRepoScreenUI(
         }
     }
 }
-
-
-/* val showButton by remember {
-           derivedStateOf {
-               lazyListState.firstVisibleItemIndex > 0
-           }
-       }
-       val composableScope = rememberCoroutineScope()
-       AnimatedVisibility(visible = showButton) {
-           ScrollToTopButton(
-               onClick = {
-                   composableScope.launch() {
-                       // Animate scroll to the first item
-                       lazyListState.animateScrollToItem(index = 0)
-                   }
-               }
-           )
-       }*/

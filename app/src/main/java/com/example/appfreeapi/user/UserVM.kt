@@ -8,9 +8,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 
 import com.example.appfreeapi.data.model.UserModel
+import com.example.appfreeapi.login.LoginEffect
 import com.example.appfreeapi.login.LoginVM
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class UserVM(private val userRepo: UserRepo = UserRepo(), private val userOwner: String) :
@@ -19,6 +22,9 @@ class UserVM(private val userRepo: UserRepo = UserRepo(), private val userOwner:
 
     private val _state: MutableStateFlow<UserState> = MutableStateFlow(UserState.Loading)
     val state: StateFlow<UserState> = _state
+
+    private val _sharedFlowEffect = MutableSharedFlow<UserEffect>()
+    val sharedFlowEffect = _sharedFlowEffect.asSharedFlow()
 
     init {
         getUser()
@@ -58,6 +64,18 @@ class UserVM(private val userRepo: UserRepo = UserRepo(), private val userOwner:
             }
     }
 
+
+    fun sendEvent(event:UserAction){
+        viewModelScope.launch {
+            when (event) {
+                is UserAction.OpenBrowser ->{
+                    _sharedFlowEffect.emit(UserEffect.OpenBrowser(event.url))
+
+                }
+            }
+        }
+    }
+
 }
 
 sealed class UserState() {
@@ -65,5 +83,16 @@ sealed class UserState() {
     data class Success(val user: UserModel) : UserState()
     object Loading : UserState()
     data class Error(val error: String) : UserState()
+}
 
+sealed class UserAction(){
+
+    data class OpenBrowser(val url:String):UserAction()
+
+}
+
+
+sealed class UserEffect(){
+
+    data class OpenBrowser(val url:String):UserEffect()
 }

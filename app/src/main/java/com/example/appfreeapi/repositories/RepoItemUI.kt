@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,11 +14,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -25,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,18 +36,26 @@ import coil.compose.AsyncImage
 import com.example.appfreeapi.R
 import com.example.appfreeapi.data.model.RepositoryModel
 import com.example.appfreeapi.ui.theme.AppFreeApiTheme
+import com.example.appfreeapi.user.UserAction
 import kotlinx.coroutines.launch
 
 @Composable
-fun RepoItemUI(repository: RepositoryModel, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun RepoItemUI(
+    repository: RepositoryModel,
+    onClick: () -> Unit,
+    onOpenUrl: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Card(
-       modifier= modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(5.dp)
             .clickable(onClick = { onClick() }),
 
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        ) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)) {
             Row(modifier = modifier.fillMaxWidth()) {
                 AsyncImage(
                     model = repository.avatarUrl,
@@ -58,9 +70,9 @@ fun RepoItemUI(repository: RepositoryModel, onClick: () -> Unit, modifier: Modif
                         .clip(RoundedCornerShape(percent = 10)),
                     placeholder = painterResource(R.drawable.ic_person)
                 )
-                Text(text = repository.fullName, style = MaterialTheme.typography.titleSmall)
+                Text(text = repository.fullName, style = MaterialTheme.typography.titleSmall,
+                    modifier= Modifier.weight(1f))
                 Row(
-                    modifier = Modifier.fillMaxWidth(1f),
                     horizontalArrangement = Arrangement.End
                 ) {
                     Text(text = repository.stargazersCount.toString())
@@ -75,17 +87,26 @@ fun RepoItemUI(repository: RepositoryModel, onClick: () -> Unit, modifier: Modif
                     text = repository.description, modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.bodyMedium, fontSize = 18.sp
                 )
-                val composableScope = rememberCoroutineScope()
-                val languages = remember { mutableStateOf("") }
-                LaunchedEffect(key1 = true) {
-                    if (repository.languages.isEmpty()) {
-                        composableScope.launch {
-                            languages.value = repository.getLanguages()
-                        }
-                    }
+                Text(text = repository.languages.joinToString(), fontStyle = FontStyle.Italic)
+
+                Text(text = "Наблюдатели: ${repository.watchers}")
+
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable {
+                    onOpenUrl()
+                }) {
+                    Text(
+                        text = repository.htmlUrl,
+                        style = MaterialTheme.typography.titleMedium,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier
+                    )
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.open_link),
+                        contentDescription = "Ссылка",
+                        modifier = Modifier.padding(start = 4.dp).size(18.dp),
+                    )
                 }
 
-                Text(text = "${languages.value}", fontStyle = FontStyle.Italic)
             }
             Text(
                 text = repository.updatedAt, textAlign = TextAlign.End,
@@ -97,21 +118,24 @@ fun RepoItemUI(repository: RepositoryModel, onClick: () -> Unit, modifier: Modif
 }
 
 
-
 @Preview(showBackground = true)
 @Composable
 private fun RepoItemUIPreview() {
     AppFreeApiTheme() {
-        RepoItemUI(RepositoryModel(id=0,
-            fullName = "Плотва Андроид",
-            nameOwner="Геральт",
+        RepoItemUI(RepositoryModel(
+            id = 0,
+            fullName = "https://www.youtube.com/watch432523587325983275832532532",
+            nameOwner = "Геральт",
             description = "Приложение для управление плотвой онлайн",
-            languages= emptyList(),
-            languagesUrl="",
+            languages = emptyList(),
+            languagesUrl = "",
             updatedAt = "2018-03-21T10:36:22Z",
-            avatarUrl = "https://avatars.githubusercontent.com/u/37593827?v=4",
-            stargazersCount = 4
+            avatarUrl = "https://avatars.githubusercontent.com/u/37593827?v=4 532532532532523532",
+            stargazersCount = 4,
+            languagesMain = "Kotlin",
+            watchers = 0,
+            htmlUrl = "https://github.com/thackl/gggenomes"
 
-        ), {})
+        ), {}, {})
     }
 }
