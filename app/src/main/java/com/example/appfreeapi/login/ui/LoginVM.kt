@@ -103,7 +103,7 @@ class LoginVM(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     }
 
     private fun clickRemoveChar() {
-        viewModelScope.launch {
+
             viewModelScope.launch {
                 when (_state.value) {
                     is LoginState.Enter -> {
@@ -136,7 +136,6 @@ class LoginVM(private val savedStateHandle: SavedStateHandle) : ViewModel() {
                     LoginState.Loading -> {}
                 }
             }
-        }
     }
 
     private fun checkEnter(pin: String) {

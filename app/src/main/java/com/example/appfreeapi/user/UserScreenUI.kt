@@ -65,12 +65,12 @@ fun UserScreen(
         }
     }
 
-    val state = vm.state.collectAsState()
-    when (state.value) {
+    val state = vm.state.collectAsState().value
+    when (state) {
         is UserState.Error -> {}
         UserState.Loading -> LoadingScreenUI()
         is UserState.Success -> {
-            UserScreenUI((state.value as UserState.Success).user, vm::sendEvent)
+            UserScreenUI(state .user, vm::sendEvent)
 
         }
     }

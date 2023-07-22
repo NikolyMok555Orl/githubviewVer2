@@ -50,7 +50,7 @@ fun LoginScreenUI(
     vm: LoginVM = viewModel(factory = LoginVM.provideFactory(owner = LocalSavedStateRegistryOwner.current))
 ) {
     val context = LocalContext.current
-    val state = vm.state.collectAsState()
+    val state = vm.state.collectAsState().value
 
     LaunchedEffect(key1 = true) {
         vm.sharedFlowEffect.collect { effect ->
@@ -69,16 +69,15 @@ fun LoginScreenUI(
             }
         }
     }
-
-    when (state.value) {
-        is LoginState.Enter -> LoginScreenEnterUI(state.value as LoginState.Enter, vm::sendEvent)
+    when (state) {
+        is LoginState.Enter -> LoginScreenEnterUI(state, vm::sendEvent)
         is LoginState.Registration -> LoginScreenRegistrationUI(
-            state.value as LoginState.Registration,
+            state,
             vm::sendEvent
         )
 
         is LoginState.TemporaryBlocking -> LoginScreenTemporaryBlockingUI(
-            state.value as LoginState.TemporaryBlocking
+            state
         )
 
         LoginState.Loading -> {
@@ -95,7 +94,7 @@ fun LoginScreenRegistrationUI(
     state: LoginState.Registration,
     sendEvent: (event: LoginAction) -> Unit
 ) {
-    val context= LocalContext.current
+    val context = LocalContext.current
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -156,7 +155,10 @@ fun LoginScreenTemporaryBlockingUI(
             .padding(25.dp)
     ) {
 
-        Text(text = stringResource(id = R.string.many_attempts_to_enter_a_pin, state.timeSec), textAlign = TextAlign.Center)
+        Text(
+            text = stringResource(id = R.string.many_attempts_to_enter_a_pin, state.timeSec),
+            textAlign = TextAlign.Center
+        )
 
     }
 }
@@ -165,69 +167,26 @@ fun LoginScreenTemporaryBlockingUI(
 @Composable
 private fun Pin(pin: String) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        PinHideUI(pin.isNotEmpty())
-        PinHideUI(pin.length >= 2)
-        PinHideUI(pin.length >= 3)
-        PinHideUI(pin.length >= 4)
+
+        for (i in 1..4) {
+            PinHideUI(i <= pin.length)
+        }
+
+
     }
 }
 
 @Composable
 private fun PinKeyBoard(sendEvent: (event: LoginAction) -> Unit) {
     Column(modifier = Modifier.width(IntrinsicSize.Min)) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            ButtonNumberUI(
-                stringResource(R.string.num_1), { sendEvent(LoginAction.ClickNumber('1')) },
-                modifier = Modifier.padding(10.dp)
-            )
-            ButtonNumberUI(
-                stringResource(R.string.num_2), { sendEvent(LoginAction.ClickNumber('2')) },
-                modifier = Modifier.padding(10.dp)
-            )
-            ButtonNumberUI(
-                stringResource(R.string.num_3),
-                { sendEvent(LoginAction.ClickNumber('3')) },
-                modifier = Modifier.padding(10.dp)
-            )
-        }
-        Row() {
-            ButtonNumberUI(
-                stringResource(R.string.num_4),
-                { sendEvent(LoginAction.ClickNumber('4')) },
-                modifier = Modifier.padding(10.dp)
-            )
-            ButtonNumberUI(
-                stringResource(R.string.num_5),
-                { sendEvent(LoginAction.ClickNumber('5')) },
-                modifier = Modifier.padding(10.dp)
-            )
-            ButtonNumberUI(
-                stringResource(R.string.num_6),
-                { sendEvent(LoginAction.ClickNumber('6')) },
-                modifier = Modifier.padding(10.dp)
-            )
-        }
-        Row() {
-            ButtonNumberUI(
-                stringResource(R.string.num_7),
-                { sendEvent(LoginAction.ClickNumber('7')) },
-                modifier = Modifier.padding(10.dp)
-            )
-            ButtonNumberUI(
-                stringResource(R.string.num_8),
-                { sendEvent(LoginAction.ClickNumber('8')) },
-                modifier = Modifier.padding(10.dp)
-            )
-            ButtonNumberUI(
-                number = stringResource(R.string.num_9),
-                onClick = { sendEvent(LoginAction.ClickNumber('9')) },
-                modifier = Modifier.padding(10.dp)
-            )
+        for (row in 0..2){
+            val start=row*3+1
+            val end=row*3+3
+            RowKeyboardPin(start..end, sendEvent)
         }
         Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-
             ButtonNumberUI(
-                stringResource(R.string.num_0),
+                "0",
                 { sendEvent(LoginAction.ClickNumber('0')) },
                 modifier = Modifier.padding(10.dp)
             )
@@ -235,6 +194,19 @@ private fun PinKeyBoard(sendEvent: (event: LoginAction) -> Unit) {
                 R.drawable.delete_left,
                 { sendEvent(LoginAction.ClickRemoveChar) },
                 Modifier.padding(10.dp)
+            )
+        }
+    }
+
+}
+
+@Composable
+private fun RowKeyboardPin(numRange: IntRange, sendEvent: (event: LoginAction) -> Unit, modifier: Modifier=Modifier) {
+    Row(modifier = modifier.fillMaxWidth()) {
+        for (num in numRange) {
+            ButtonNumberUI(
+                num.toString(), { sendEvent(LoginAction.ClickNumber(num.toChar())) },
+                modifier = Modifier.padding(10.dp)
             )
         }
     }

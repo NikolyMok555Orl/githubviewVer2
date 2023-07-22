@@ -2,11 +2,12 @@ package com.example.appfreeapi.utils
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
-import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import com.example.appfreeapi.R
+
 
 fun openBrowser(context:Context, url:String){
     ContextCompat.startActivity(
