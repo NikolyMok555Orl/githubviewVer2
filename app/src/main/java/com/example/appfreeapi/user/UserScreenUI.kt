@@ -57,18 +57,12 @@ fun UserScreen(
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         vm.sharedFlowEffect.collect { effect ->
-
             when (effect) {
                 is UserEffect.OpenBrowser -> {
                     openBrowser(context,effect.url )
-
                 }
             }
-
-
         }
-
-
     }
 
     val state = vm.state.collectAsState()
