@@ -1,27 +1,23 @@
 package com.example.appfreeapi
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -34,9 +30,9 @@ import androidx.navigation.navArgument
 import com.example.appfreeapi.NavHost.PROFILE
 import com.example.appfreeapi.NavHost.REPOIES
 import com.example.appfreeapi.NavHost.itemsMenu
-import com.example.appfreeapi.login.LoginScreenUI
+import com.example.appfreeapi.login.ui.LoginScreenUI
 import com.example.appfreeapi.profile.ui.ProfileScreenUI
-import com.example.appfreeapi.repositories.SearchRepoScreenUI
+import com.example.appfreeapi.repositories.ui.SearchRepoScreenUI
 import com.example.appfreeapi.user.UserScreen
 
 
@@ -48,15 +44,19 @@ fun AppNavHost(
     startDestination: String = NavHost.START
 ) {
     val bottomBarState = rememberSaveable { (mutableStateOf(false)) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
     Scaffold(
         bottomBar = {
             AnimatedVisibility(visible = bottomBarState.value) {
-                BottomNavigation(backgroundColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer) {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
+                BottomNavigation(
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                ) {
+
                     itemsMenu.forEach { screen ->
                         BottomNavigationItem(
-                            icon = { Icon(screen.icon, contentDescription = null)},
+                            icon = { Icon(screen.icon, contentDescription = null) },
                             label = { },
                             selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                             onClick = {
@@ -105,6 +105,26 @@ fun AppNavHost(
                 UserScreen(navController, it.arguments?.getString(NavHost.USER_URL) ?: "")
             }
         }
+    }
+
+    LaunchedEffect(key1 = true) {
+
+        if (App.checkEndSession() && currentDestination?.route?.equals(NavHost.START)==true) {
+            navController.navigate(NavHost.START) {
+                popUpTo(NavHost.START) {
+                    inclusive = true
+                }
+            }
+        } else {
+            App.sharedFlowExit.collect {
+                navController.navigate(NavHost.START) {
+                    popUpTo(NavHost.START) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+
     }
 
 

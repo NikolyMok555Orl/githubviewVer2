@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 
-import com.example.appfreeapi.data.model.UserModel
-import com.example.appfreeapi.login.LoginEffect
-import com.example.appfreeapi.login.LoginVM
+import com.example.appfreeapi.user.data.model.UserModel
+import com.example.appfreeapi.user.data.UserRepo
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,7 +47,7 @@ class UserVM(private val userRepo: UserRepo = UserRepo(), private val userOwner:
     companion object {
 
         fun provideFactory(
-            userRepo: UserRepo = UserRepo(),  userOwner: String,
+            userRepo: UserRepo = UserRepo(), userOwner: String,
             owner: SavedStateRegistryOwner,
             defaultArgs: Bundle? = null,
         ): AbstractSavedStateViewModelFactory =

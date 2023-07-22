@@ -10,11 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import com.example.appfreeapi.NavHost
+import com.example.appfreeapi.R
 
 
 @Composable
@@ -42,11 +44,11 @@ fun ProfileScreenUI(sendEvent:(event:ProfileAction)->Unit,) {
         .fillMaxSize()
         .padding(8.dp)) {
         Button(onClick = { sendEvent(ProfileAction.ResetPin) }, modifier = Modifier.fillMaxWidth()) {
-            Text("Сбросить пинкод")
+            Text(stringResource(R.string.reset_pin))
         }
 
         Button(onClick = {sendEvent(ProfileAction.Exit) }, modifier = Modifier.fillMaxWidth()) {
-            Text("Выйти")
+            Text(stringResource(R.string.exit))
         }
     }
 

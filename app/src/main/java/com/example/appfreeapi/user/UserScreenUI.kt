@@ -1,7 +1,5 @@
 package com.example.appfreeapi.user
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -30,6 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -37,12 +34,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.appfreeapi.R
-import com.example.appfreeapi.data.model.UserModel
+import com.example.appfreeapi.user.data.model.UserModel
 import com.example.appfreeapi.ui.theme.AppFreeApiTheme
 import com.example.appfreeapi.ui.theme.component.LoadingScreenUI
 import com.example.appfreeapi.utils.openBrowser
@@ -108,8 +104,9 @@ fun UserScreenUI(
                 Column(modifier = Modifier.fillMaxSize()) {
                     AsyncImage(
                         model = user.avatarUrl,
-                        contentDescription = "Аватар",
-                        modifier = Modifier.clip(RoundedCornerShape(5.dp))
+                        contentDescription = stringResource(id = R.string.avatar),
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(5.dp))
                             .fillMaxWidth()
                             .weight(1f)
                             .padding(5.dp),
@@ -129,21 +126,21 @@ fun UserScreenUI(
                                 text = "${user.followers}",
                                 style = MaterialTheme.typography.headlineSmall
                             )
-                            Text(text = "Followers", style = MaterialTheme.typography.labelMedium)
+                            Text(text = stringResource(R.string.followers), style = MaterialTheme.typography.labelMedium)
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = "${user.following}",
                                 style = MaterialTheme.typography.headlineSmall
                             )
-                            Text(text = "Following", style = MaterialTheme.typography.labelMedium)
+                            Text(text = stringResource(R.string.following), style = MaterialTheme.typography.labelMedium)
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = "${user.publicRepos}",
                                 style = MaterialTheme.typography.headlineSmall
                             )
-                            Text(text = "Public repo", style = MaterialTheme.typography.labelMedium)
+                            Text(text = stringResource(R.string.count_public_repo), style = MaterialTheme.typography.labelMedium)
                         }
 
 
@@ -167,13 +164,13 @@ fun UserScreenUI(
             }
 
             Text(
-                text = "О себе",
+                text = stringResource(R.string.about_me),
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 modifier=Modifier.padding(vertical = 10.dp)
             )
             Text(text = user.bio, style = MaterialTheme.typography.bodyMedium)
             Text(
-                text = "Ссылки",
+                text = stringResource(id = R.string.links_url),
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 modifier=Modifier.padding(top = 10.dp)
             )
@@ -190,7 +187,7 @@ fun UserScreenUI(
                         )
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.open_link),
-                            contentDescription = "Ссылка",
+                            contentDescription = stringResource(id = R.string.link_url),
                             modifier = Modifier.padding(start = 4.dp),
                         )
                     }
@@ -209,7 +206,7 @@ fun UserScreenUI(
                     )
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.open_link),
-                        contentDescription = "Ссылка",
+                        contentDescription = stringResource(id = R.string.link_url),
                         modifier = Modifier.padding(start = 4.dp),
                     )
                 }

@@ -1,8 +1,8 @@
 package com.example.appfreeapi.data
 
-import com.example.appfreeapi.data.js.JsRepositories
-import com.example.appfreeapi.data.js.JsUser
-import com.example.appfreeapi.data.model.RepositoriesModel
+import com.example.appfreeapi.repositories.data.js.JsRepositories
+import com.example.appfreeapi.user.data.js.JsUser
+import com.example.appfreeapi.repositories.data.model.RepositoriesModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

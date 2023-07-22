@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">AppFreeApi</string>
+    <string name="registration">Регистрация</string>
+    <string name="enter_your_pin">Введете пин код</string>
+    <string name="confirm_pin">Подтвердите пин код</string>
+    <string name="many_attempts_to_enter_a_pin">Слишком много попыток!\n
+ Попробуйте позже %1$d секунд</string>
+    <string name="num_1">1</string>
+    <string name="num_2">2</string>
+    <string name="num_3">3</string>
+    <string name="num_4">4</string>
+    <string name="num_5">5</string>
+    <string name="num_6">6</string>
+    <string name="num_7">7</string>
+    <string name="num_8">8</string>
+    <string name="num_9">9</string>
+    <string name="num_0">0</string>
+    <string name="clear">Очистить</string>
+    <string name="reset_pin">Сбросить пинкод</string>
+    <string name="exit">Выйти</string>
+    <string name="avatar">Аватар</string>
+    <string name="count_watcher">Наблюдатели: %1$d</string>
+    <string name="link_url">Ссылка</string>
+    <string name="links_url">Ссылки</string>
+    <string name="error_general">Произошла ошибка</string>
+    <string name="enter_a_request">Введите запрос</string>
+    <string name="followers">Последователи</string>
+    <string name="following">Подписки</string>
+    <string name="count_public_repo">Публичные репозитории</string>
+    <string name="about_me">О себе</string>
+    <string name="blocked">Ещё заблокированно</string>
+    <string name="pin_wrong">Пин код неверный</string>
+   <string name="pin_not_match">Пинкод не совпадает</string>
+    <string name="error_pin">Ошибка при регистрации</string>
 </resources>

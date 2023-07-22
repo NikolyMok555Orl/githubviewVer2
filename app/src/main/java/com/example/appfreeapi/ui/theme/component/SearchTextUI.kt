@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.appfreeapi.R
 import com.example.appfreeapi.ui.theme.AppFreeApiTheme
 
 /**Блок поиска*/
@@ -32,7 +34,7 @@ fun SearchTextUI(
     onQueryChange: (newQuery: String) -> Unit,
     onSearchClick: (query: String) -> Unit,
     onCloseAndClear: () -> Unit,
-    textLabel:String="Введите запрос",
+    textLabel:String= stringResource(R.string.enter_a_request),
     maxLines:Int = 1,
     modifier: Modifier = Modifier
 ) {
@@ -53,7 +55,7 @@ fun SearchTextUI(
                 trailingIcon = {
                     if (query.isNotEmpty()) {
                         IconButton(onClick = onCloseAndClear) {
-                            Icon(Icons.Default.Clear, contentDescription = "Очистить")
+                            Icon(Icons.Default.Clear, contentDescription = stringResource(id = R.string.clear))
                         }
                     }
                 },
@@ -68,7 +70,6 @@ fun SearchTextUI(
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         onSearchClick(query)
-                        //searchModel.insert(query)
                         focusManager.clearFocus()
                     }
                 ),
