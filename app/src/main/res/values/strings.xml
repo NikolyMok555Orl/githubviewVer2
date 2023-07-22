@@ -23,6 +23,7 @@
     <string name="link_url">Ссылка</string>
     <string name="links_url">Ссылки</string>
     <string name="error_general">Произошла ошибка</string>
+    <string name="error_unknow">Неизвестная ошибка</string>
     <string name="enter_a_request">Введите запрос</string>
     <string name="followers">Последователи</string>
     <string name="following">Подписки</string>
@@ -32,4 +33,5 @@
     <string name="pin_wrong">Пин код неверный</string>
    <string name="pin_not_match">Пинкод не совпадает</string>
     <string name="error_pin">Ошибка при регистрации</string>
+    <string name="no_user">Пользователя нет</string>
 </resources>

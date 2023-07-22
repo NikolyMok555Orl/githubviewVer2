@@ -6,9 +6,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
+import com.example.appfreeapi.R
 
 import com.example.appfreeapi.user.data.model.UserModel
 import com.example.appfreeapi.user.data.UserRepo
+import com.example.appfreeapi.utils.ErrorData
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +41,7 @@ class UserVM(private val userRepo: UserRepo = UserRepo(), private val userOwner:
                 res.error?.let {
                     _state.emit(UserState.Error(it))
                 } ?: kotlin.run {
-                    _state.emit(UserState.Error("Пользователя нет $userOwner"))
+                    _state.emit(UserState.Error(ErrorData(resStr = R.string.no_user, additionalInfo =  userOwner)))
                 }
             }
         }
@@ -81,7 +83,7 @@ sealed class UserState() {
 
     data class Success(val user: UserModel) : UserState()
     object Loading : UserState()
-    data class Error(val error: String) : UserState()
+    data class Error(val error: ErrorData) : UserState()
 }
 
 sealed class UserAction(){

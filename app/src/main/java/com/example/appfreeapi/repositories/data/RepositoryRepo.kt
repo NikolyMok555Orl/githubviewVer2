@@ -3,9 +3,11 @@ package com.example.appfreeapi.repositories.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.appfreeapi.R
 import com.example.appfreeapi.data.Api
 import com.example.appfreeapi.repositories.data.model.RepositoriesModel
 import com.example.appfreeapi.repositories.data.model.RepositoryModel
+import com.example.appfreeapi.utils.ErrorData
 import com.example.appfreeapi.utils.ResponseJs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -15,7 +17,7 @@ import kotlinx.coroutines.withContext
 
 class RepositoryRepo {
 
-    suspend fun getRepositories(q: String, page: Int): ResponseJs<RepositoriesModel, String> =
+    suspend fun getRepositories(q: String, page: Int): ResponseJs<RepositoriesModel, ErrorData> =
         withContext(Dispatchers.IO) {
             kotlin.runCatching {
                 Api.get().searchRepositories(q = q, page = page)
@@ -34,9 +36,9 @@ class RepositoryRepo {
                 )
 
             }.onFailure {
-                return@withContext ResponseJs(false, null, "$it")
+                return@withContext ResponseJs(false, null, ErrorData(text = it.message))
             }
-            return@withContext ResponseJs(false, null, "Неизвестная ошибка")
+            return@withContext ResponseJs(false, null, ErrorData(resStr = R.string.error_unknow))
         }
 
 

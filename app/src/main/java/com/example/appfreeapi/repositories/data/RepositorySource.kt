@@ -19,7 +19,7 @@ class RepositorySource(private val repo: RepositoryRepo, private val query: Stri
             val nextPageNumber = params.key ?: 1
             val response = repo.getRepositories(query, nextPageNumber)
 
-            if(!response.success) return LoadResult.Error(Throwable(response.error?:"Неизвестная ошибка"))
+            if(!response.success) return LoadResult.Error(Throwable(response.error.toString()))
             response.data?.let {data->
 
                 return LoadResult.Page(

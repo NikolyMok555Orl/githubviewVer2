@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import com.example.appfreeapi.R
 
 fun openBrowser(context:Context, url:String){
     ContextCompat.startActivity(
@@ -38,15 +39,19 @@ data class MessageToast(private val text:String?=null, @StringRes private val re
 }
 
 
-data class ErrorData(private val text:String?=null, @StringRes private val resStr:Int?=null):GetStringDiffResource{
+data class ErrorData(private val text:String?=null, @StringRes private val resStr:Int?=null, private val additionalInfo:String?=null):GetStringDiffResource{
 
     override fun getMessage(context: Context):String{
         if(text!=null){
-            return text
+            return "$text: $additionalInfo"
         }
         if (resStr!=null){
-            return context.getString(resStr)
+            return "${context.getString(resStr)} $additionalInfo"
         }
-        return ""
+        return context.getString(R.string.error_unknow)
+    }
+
+    override fun toString(): String {
+        return text?:"${resStr?: R.string.error_unknow}"
     }
 }
