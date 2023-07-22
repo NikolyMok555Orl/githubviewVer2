@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 class LoginVM(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-    //TODO может быть mutableFlow???
+
     private val finalTimeMillis: MutableLiveData<Long> = savedStateHandle.getLiveData(END_TM_TIMER)
 
 

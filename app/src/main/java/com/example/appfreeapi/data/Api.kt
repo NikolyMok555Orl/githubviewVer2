@@ -34,11 +34,9 @@ interface Api {
     @GET
     suspend fun getLanguages(@Header("Authorization") token :String =Api.token ,@Url url: String): Map<String, Int>
 
-    /*@GET("search/repositories")
-    fun searchRepositories(@Query("query") q: String): Call<JsRepositories>*/
-
 
     companion object {
+        /**Токен временный, для использование может потребовать замены*/
         private const val token="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"
         private const val URL = "https://api.github.com/"
 

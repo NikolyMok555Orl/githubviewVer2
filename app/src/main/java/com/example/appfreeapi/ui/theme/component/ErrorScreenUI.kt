@@ -15,14 +15,10 @@ import com.example.appfreeapi.ui.theme.AppFreeApiTheme
 fun ErrorScreenUI(error: String, modifier: Modifier=Modifier) {
     Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()) {
         Text(
-            text = "$error",
+            text = error,
             style = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.error)
         )
-
-
     }
-
-
 }
 
 @Preview(showBackground = true)

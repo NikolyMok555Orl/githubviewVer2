@@ -11,7 +11,6 @@ data class UserModel(
     val blog: String,
     val followers: Int,
     val following: Int,
-    //TODO новое
     val htmlUrl: String,
     val type: String,
     val publicRepos: Int,

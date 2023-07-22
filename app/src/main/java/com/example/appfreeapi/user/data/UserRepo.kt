@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class UserRepo {
-
     suspend fun getUser(userOwner:String): ResponseJs<UserModel, String> =
         withContext(Dispatchers.IO) {
             kotlin.runCatching {

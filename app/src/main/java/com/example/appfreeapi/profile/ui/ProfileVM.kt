@@ -14,8 +14,6 @@ class ProfileVM():ViewModel() {
     val sharedFlowEffect = _sharedFlowEffect.asSharedFlow()
 
     fun sendEvent(event:ProfileAction){
-
-
         when(event){
             ProfileAction.Exit -> exit()
             ProfileAction.ResetPin -> resetPin()

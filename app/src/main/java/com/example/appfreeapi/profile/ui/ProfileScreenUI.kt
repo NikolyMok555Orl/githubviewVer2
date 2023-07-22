@@ -20,11 +20,11 @@ import com.example.appfreeapi.R
 
 
 @Composable
-fun ProfileScreenUI(navController: NavController, vm: ProfileVM= viewModel()) {
-    LaunchedEffect(key1 = true){
-        vm.sharedFlowEffect.collect{effect->
-            when(effect){
-                ProfileEffect.NavToLogin ->navController.navigate(NavHost.START){
+fun ProfileScreenUI(navController: NavController, vm: ProfileVM = viewModel()) {
+    LaunchedEffect(key1 = true) {
+        vm.sharedFlowEffect.collect { effect ->
+            when (effect) {
+                ProfileEffect.NavToLogin -> navController.navigate(NavHost.START) {
                     popUpTo(NavHost.START) {
                         inclusive = true
                     }
@@ -32,22 +32,25 @@ fun ProfileScreenUI(navController: NavController, vm: ProfileVM= viewModel()) {
             }
         }
     }
-
-
     ProfileScreenUI(vm::sendEvent)
 }
 
 
 @Composable
-fun ProfileScreenUI(sendEvent:(event:ProfileAction)->Unit,) {
-    Column(verticalArrangement = Arrangement.Center,modifier = Modifier
-        .fillMaxSize()
-        .padding(8.dp)) {
-        Button(onClick = { sendEvent(ProfileAction.ResetPin) }, modifier = Modifier.fillMaxWidth()) {
+fun ProfileScreenUI(sendEvent: (event: ProfileAction) -> Unit) {
+    Column(
+        verticalArrangement = Arrangement.Center, modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+        Button(
+            onClick = { sendEvent(ProfileAction.ResetPin) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(stringResource(R.string.reset_pin))
         }
 
-        Button(onClick = {sendEvent(ProfileAction.Exit) }, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = { sendEvent(ProfileAction.Exit) }, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.exit))
         }
     }

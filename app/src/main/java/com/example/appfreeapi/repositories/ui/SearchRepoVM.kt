@@ -22,8 +22,6 @@ class SearchRepoVM(private val repositoryRepo: RepositoryRepo = RepositoryRepo()
     private val _state: MutableStateFlow<SearchStateUI> = MutableStateFlow(SearchStateUI("", true))
     val state: StateFlow<SearchStateUI> = _state
 
-    //TODO фигня
-    @OptIn(ExperimentalCoroutinesApi::class)
     val pagingDataFlow: Flow<PagingData<RepositoryModel>>
 
     private val _sharedFlowEffect = MutableSharedFlow<SearchRepoEffect>()
