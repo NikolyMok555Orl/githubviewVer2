@@ -205,7 +205,7 @@ private fun RowKeyboardPin(numRange: IntRange, sendEvent: (event: LoginAction) -
     Row(modifier = modifier.fillMaxWidth()) {
         for (num in numRange) {
             ButtonNumberUI(
-                num.toString(), { sendEvent(LoginAction.ClickNumber(num.toChar())) },
+                num.toString(), { sendEvent(LoginAction.ClickNumber("$num"[0])) },
                 modifier = Modifier.padding(10.dp)
             )
         }

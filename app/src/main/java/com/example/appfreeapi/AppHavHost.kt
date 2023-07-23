@@ -109,14 +109,14 @@ fun AppNavHost(
 
     LaunchedEffect(key1 = true) {
 
-        if (App.checkEndSession() && currentDestination?.route?.equals(NavHost.START)==true) {
+        if (SecuritySetting.checkEndSession() && currentDestination?.route?.equals(NavHost.START)==true) {
             navController.navigate(NavHost.START) {
                 popUpTo(NavHost.START) {
                     inclusive = true
                 }
             }
         } else {
-            App.sharedFlowExit.collect {
+            SecuritySetting.sharedFlowExit.collect {
                 navController.navigate(NavHost.START) {
                     popUpTo(NavHost.START) {
                         inclusive = true

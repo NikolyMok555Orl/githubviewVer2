@@ -8,8 +8,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
-import com.example.appfreeapi.App
 import com.example.appfreeapi.R
+import com.example.appfreeapi.SecuritySetting
 import com.example.appfreeapi.utils.ErrorData
 import com.example.appfreeapi.utils.MessageToast
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -39,14 +39,14 @@ class LoginVM(private val savedStateHandle: SavedStateHandle) : ViewModel() {
                     startTimer(startTime)
                     _state.emit(LoginState.TemporaryBlocking(durationToFinal))
                 } else {
-                    if (App.isTheFirstStart()) {
+                    if (SecuritySetting.isTheFirstStart()) {
                         _state.emit(LoginState.Registration())
                     } else {
                         _state.emit(LoginState.Enter())
                     }
                 }
             } ?: kotlin.run {
-                if (App.isTheFirstStart()) {
+                if (SecuritySetting.isTheFirstStart()) {
                     _state.emit(LoginState.Registration())
                 } else {
                     _state.emit(LoginState.Enter())
@@ -141,7 +141,7 @@ class LoginVM(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     private fun checkEnter(pin: String) {
         viewModelScope.launch {
             if (pin.length == 4) {
-                if (App.login(pin)) {
+                if (SecuritySetting.login(pin)) {
                     _sharedFlowEffect.emit(LoginEffect.NavToRepo)
                 } else {
                     if (_state.value is LoginState.Enter) {
@@ -189,7 +189,7 @@ class LoginVM(private val savedStateHandle: SavedStateHandle) : ViewModel() {
                 _state.emit(LoginState.Registration(error = ErrorData(resStr = R.string.pin_not_match)))
                 return@launch
             }
-            if (App.setPIN(firstPin)) {
+            if (SecuritySetting.setPIN(firstPin)) {
                 _sharedFlowEffect.emit(LoginEffect.NavToRepo)
             } else {
                 _state.emit(LoginState.Registration(error = ErrorData(resStr =R.string.error_pin)))

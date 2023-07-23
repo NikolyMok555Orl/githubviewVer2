@@ -3,6 +3,7 @@ package com.example.appfreeapi.profile.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appfreeapi.App
+import com.example.appfreeapi.SecuritySetting
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class ProfileVM():ViewModel() {
 
     private fun resetPin(){
         viewModelScope.launch {
-             App.resetPin()
+             SecuritySetting.resetPin()
             _sharedFlowEffect.emit(ProfileEffect.NavToLogin)
         }
     }
